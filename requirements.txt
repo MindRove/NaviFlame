@@ -1,0 +1,6 @@
+numpy
+opencv-python
+scikit-learn
+tensorflow==2.12.0
+mindrove
+keyboard
