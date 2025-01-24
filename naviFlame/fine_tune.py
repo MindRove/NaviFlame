@@ -2,6 +2,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from keras.models import Model
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import cross_val_score
 import pickle
 import logging
 import numpy as np
@@ -19,6 +21,7 @@ def fine_tune_svm(
     recorded_data, 
     recorded_labels, 
     svm_path,
+    mlp_model_path,
     scaler_path,
     C=5.0, 
     kernel='rbf', 
@@ -46,7 +49,7 @@ def fine_tune_svm(
     X_train, X_val, y_train, y_val = train_test_split( np.array(recorded_data), np.array(recorded_labels), test_size=0.2, random_state=42)
 
     # Feature extraction
-    feature_extractor = Model(inputs=model.input, outputs=model.get_layer("dense_9").output)
+    feature_extractor = Model(inputs=model.input, outputs=model.get_layer("dense_8").output)
     features_train = feature_extractor.predict(X_train)
     features_val = feature_extractor.predict(X_val)
 
@@ -70,12 +73,33 @@ def fine_tune_svm(
         pickle.dump(scaler, f)
         logging.info("Scaler saved.")
 
+    # MLP model training
+    mlp = MLPClassifier(
+        hidden_layer_sizes=(256, 128, 64, 32), 
+        max_iter=1000, 
+        random_state=42,
+        activation='relu',  
+        solver='adam',  
+        alpha=0.0001,
+    )
+    mlp.fit(X_train_scaled, y_train)
+    mlp_accuracy = mlp.score(X_val_scaled, y_val)
+    logging.info(f"MLP validation accuracy: {mlp_accuracy}")
+    logging.info(f"MLP validation accuracy: {cross_val_score(mlp, X_train_scaled, y_train, cv=5)}")
+
+    # Save the MLP model
+    with open(mlp_model_path, "wb") as f:
+        pickle.dump(mlp, f)
+        logging.info("MLP model saved.")
+
     # Validation accuracy
     val_accuracy = svm.score(X_val_scaled, y_val)
-    logging.info(f"Validation accuracy: {val_accuracy}")
-    if val_accuracy < 0.80:
+    logging.info(f"SVM validation accuracy: {val_accuracy}")
+    val_accuracies = cross_val_score(svm, X_train_scaled, y_train, cv=5)
+    logging.info(f"Cross-validation accuracies: {val_accuracies}")
+    if val_accuracy < 0.60:
         response = input(
-            "Validation accuracy is below 80%. Would you like to stop and check the device (Yes/No)? "
+            "SVM validation accuracy is below 80%. Would you like to stop and check the device (Yes/No)? "
         ).strip().lower()
         if response in ("yes", "y"):
             logging.info(

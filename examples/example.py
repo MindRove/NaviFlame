@@ -22,13 +22,14 @@ def main():
     data_path = os.path.join(base_dir, "data", "recorded_gestures.pkl")
     feature_extractor_path = os.path.join(base_dir, "data", "og_fine_tune.h5")
     svm_model_path = os.path.join(base_dir, "data", "svm_model.pkl")
+    mlp_model_path = os.path.join(base_dir, "data", "mlp_model.pkl")
     scaler_path = os.path.join(base_dir, "data", "scaler.pkl")
     gesture_image_path = os.path.join(base_dir, "gestures")
 
 
     # Flags 
     record = False
-    fine_tune = False
+    fine_tune = True
     show_predicted_image = True
     send_to_socket = True
     
@@ -74,6 +75,7 @@ def main():
             recorded_data=recorded_data,
             recorded_labels=recorded_labels,
             scaler_path=scaler_path,
+            mlp_model_path=mlp_model_path,
             svm_path=svm_model_path
         )
         print(f"Fine-tuning complete. Validation accuracy: {val_accuracy:.2f}")
@@ -91,6 +93,7 @@ def main():
         for prediction, probabilities in real_time_inference(
             feature_extractor_path=feature_extractor_path,
             svm_model_path=svm_model_path,
+            mlp_model_path=mlp_model_path,
             scaler_path=scaler_path,
             filters=filters,
             model_input_len=model_input_len,
