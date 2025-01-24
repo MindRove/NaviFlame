@@ -18,7 +18,8 @@ The naviFlame implements a pipeline for recording, fine-tuning, and performing r
 3. [Usage](#usage)
 4. [Input Parameters](#input-parameters)
 5. [System Pipeline](#system-pipeline)
-6. [Contact](#contact)
+6. [Unity Visualization](#unity-visualization)
+7. [Contact](#contact)
 
 ---
 
@@ -137,12 +138,9 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 The Unity application is designed to visualize the gestures detected by the `naviFlame` system. It connects to the same socket used for data transmission and provides a real-time display of the gestures as 3D animations.
 
 ### Running the Unity Application
-1. Navigate to the `UnityExecutable/` folder.
-2. Run the `.exe` file provided.
-3. Ensure that the naviFlame application is running and actively sending data to the socket.
-
-### Integration Details
-The naviFlame project sends predictions via a socket connection (default: localhost:8052). The Unity application listens on the same socket to receive gesture predictions and render visual outputs in real time. Ensure both applications are running simultaneously.
+1. Decompress the zip file into a folder of your choice (e.g., naviFlame_unity_visualizer/). 
+2. Inside the decompressed folder, locate the naviFlame_visualizer.exe file and run it to start the Unity application.
+3. Ensure that the Unity application is run prior to the  naviFlame. The visualizer will automatically connect to the socket and display the gestures real-time.
 
 ---
 ## Contact
