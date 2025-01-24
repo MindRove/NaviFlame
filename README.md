@@ -23,7 +23,7 @@ The naviFlame implements a pipeline for recording, fine-tuning, and performing r
 
 ## Setup
 
-### Prerequisites
+### Requirements
 - Python >=3.7 and <3.11.
 - Libraries:
   - `tensorflow==2.12.0`
