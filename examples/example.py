@@ -11,22 +11,26 @@ from naviFlame.fine_tune import fine_tune_svm
 from naviFlame.inference import real_time_inference
 from naviFlame.inference import show_image_for_prediction
 from naviFlame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
+from naviFlame.utils import BiquadMultiChan, FilterTypes
 
 
 def main():
+
     # Paths for models and data
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'naviFlame'))  
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'naviFlame'))
     data_path = os.path.join(base_dir, "data", "recorded_gestures.pkl")
     feature_extractor_path = os.path.join(base_dir, "data", "og_fine_tune.h5")
     svm_model_path = os.path.join(base_dir, "data", "svm_model.pkl")
     scaler_path = os.path.join(base_dir, "data", "scaler.pkl")
     gesture_image_path = os.path.join(base_dir, "gestures")
 
+    # Flags 
     record = False
     fine_tune = True
     show_predicted_image = True
     send_to_socket = True
     
+    # Skip gestures
     skip_gestures = []
     # Sampling rate and model input length
     sampling_rate = 500
@@ -58,10 +62,11 @@ def main():
 
     # Step 2: Fine-Tune the SVM Model
     print("Step 2: Fine-Tuning the SVM Model")
-    with open(data_path, "rb") as f:
-        recorded_data, recorded_labels = pickle.load(f)
     
     if fine_tune:
+        with open(data_path, "rb") as f:
+            recorded_data, recorded_labels = pickle.load(f)
+
         svm, scaler, val_accuracy = fine_tune_svm(
             feature_extractor_path=feature_extractor_path,
             recorded_data=recorded_data,
