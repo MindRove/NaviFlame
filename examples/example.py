@@ -3,6 +3,7 @@ import sys
 import pickle
 from threading import Event, Thread
 from queue import Queue
+import cv2
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -24,9 +25,10 @@ def main():
     scaler_path = os.path.join(base_dir, "data", "scaler.pkl")
     gesture_image_path = os.path.join(base_dir, "gestures")
 
+
     # Flags 
     record = False
-    fine_tune = True
+    fine_tune = False
     show_predicted_image = True
     send_to_socket = True
     
@@ -104,6 +106,13 @@ def main():
             
     except KeyboardInterrupt:
         print("Real-time inference stopped.")
+        if send_to_socket:
+            stop_event.set()
+            socket_thread.join()
+        # close all windows
+        cv2.destroyAllWindows()
+
+    print("Example script completed.")
 
 if __name__ == "__main__":
     main()

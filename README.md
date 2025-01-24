@@ -7,6 +7,7 @@ The naviFlame implements a pipeline for recording, fine-tuning, and performing r
 - Record gestures with EMG data from the MindRove device.
 - Fine-tune an SVM model for user.
 - Real-time inference and display of gesture predictions.
+- A Unity-based application that visualizes data sent from `naviFlame` via a socket.
 
 
 ---
@@ -127,6 +128,23 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 - The real_time_inference function processes live EMG data and predicts gestures.
 - Predictions are visualized and optionally sent via a socket connection.
 
+
+---
+
+## Unity Visualization
+
+### Description
+The Unity application is designed to visualize the gestures detected by the `naviFlame` system. It connects to the same socket used for data transmission and provides a real-time display of the gestures as 3D animations.
+
+### Running the Unity Application
+1. Navigate to the `UnityExecutable/` folder.
+2. Run the `.exe` file provided.
+3. Ensure that the naviFlame application is running and actively sending data to the socket.
+
+### Integration Details
+The naviFlame project sends predictions via a socket connection (default: localhost:8052). The Unity application listens on the same socket to receive gesture predictions and render visual outputs in real time. Ensure both applications are running simultaneously.
+
+---
 ## Contact
 For support, collaboration, or queries, please reach out via:
 - **Email**: [support@mindrove.com](mailto:info@mindrove.com)
