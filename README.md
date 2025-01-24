@@ -17,7 +17,7 @@ The naviFlame implements a pipeline for recording, fine-tuning, and performing r
 3. [Usage](#usage)
 4. [Input Parameters](#input-parameters)
 5. [System Pipeline](#system-pipeline)
-6. [Acknowledgements](#acknowledgements)
+6. [Contact](#contact)
 
 ---
 
@@ -77,16 +77,24 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 ### Recording Parameters
 | Parameter             | Description                                      | Default Value             |
 |-----------------------|--------------------------------------------------|---------------------------|
-| `filters`             | List of signal filters applied during recording. | Highpass, Notch, Lowpass  |
-| `data_path`           | Path to save gesture data.                       | `data/recorded_gestures.pkl` |
-| `gesture_image_path`  | Directory containing gesture images.             | `gestures/`               |
+| `filters`             | List of filters applied during recording.        | - |
+| `data_path`           | Path to save the recorded data.                  | - |
+| `gesture_image_path`  | Path to the gesture images.                      | `gestures/`               |
 | `skip_gestures`       | List of gesture IDs to skip.                     | `[]`                      |
 | `gestures_repeat`     | Number of repetitions for each gesture.          | `1`                       |
-| `recording_time_sec`  | Duration for recording each gesture.             | `8 seconds`               |
+| `recording_time_sec`  | Duration to record each gesture.                 | `8` seconds               |
+| `sampling_rate`       | Sampling rate of the MindRove board.             | `500` Hz                  |
+| `model_input_len`     | Length of input data to the model.               | `100` samples             |
+| `overlap_frac`        | Overlap fraction between samples.                | `10`                      |
 
 ### Fine-Tuning Parameters
 | Parameter             | Description                                      | Default Value             |
 |-----------------------|--------------------------------------------------|---------------------------|
+| `feature_extractor_path` | Path to the feature extractor model.           | -    |
+| `recorded_data`       | List of recorded data used for training.         | -                      |
+| `recorded_labels`     | List of labels for the recorded data.            | -                       |
+| `svm_path`            | Path to save the trained SVM model.              | -      |
+| `scaler_path`         | Path to save the scaler used for normalization.  | -         |
 | `C`                   | SVM regularization parameter.                   | `5.0`                     |
 | `kernel`              | SVM kernel type.                                | `rbf`                     |
 | `gamma`               | Kernel coefficient for SVM.                     | `scale`                   |
@@ -94,23 +102,33 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 ### Inference Parameters
 | Parameter             | Description                                      | Default Value             |
 |-----------------------|--------------------------------------------------|---------------------------|
-| `model_input_len`     | Input length for the gesture model.              | `100` samples             |
+| `feature_extractor_path` | Path to the feature extractor model.           | -    |
+| `svm_model_path`      | Path to the SVM model.                           | -      |
+| `scaler_path`         | Path to the scaler used for normalization.       | -         |
+| `filters`             | List of filters applied during inference.        | -  |
+| `model_input_len`     | Length of input data to the model.               | `100` samples             |
 | `gyro_threshold`      | Threshold for gyro data filtering.               | `2000`                    |
-| `prediction_threshold`| Minimum confidence for gesture predictions.      | `0.4`                     |
-| `batch_size`          | Number of samples processed per batch.           | `5`                       |
+| `prediction_threshold`| Confidence threshold for gesture predictions.    | `0.4`                     |
+| `batch_size`          | Number of samples processed for one prediction.  | `5`                       |
 
 
 
 ## System Pipeline
 1. Data Recording:
 
-The record_gestures function records EMG data from the MindRove board.
-Signals are preprocessed using filters for noise reduction.
+- The record_gestures function records EMG data from the MindRove board.
+- Signals are preprocessed using filters for noise reduction.
 2. Fine-Tuning:
 
-The fine_tune_svm function extracts features and trains an SVM classifier.
-Data is scaled, and model performance is validated.
+- The fine_tune_svm function extracts features and trains an SVM classifier.
+- Data is scaled, and model performance is validated.
 3. Real-Time Inference:
 
-The real_time_inference function processes live EMG data and predicts gestures.
-Predictions are visualized and optionally sent via a socket connection.
+- The real_time_inference function processes live EMG data and predicts gestures.
+- Predictions are visualized and optionally sent via a socket connection.
+
+## Contact
+For support, collaboration, or queries, please reach out via:
+- **Email**: [support@mindrove.com](mailto:info@mindrove.com)
+- **Website**: [MindRove](https://mindrove.com/)
+
