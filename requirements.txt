@@ -4,4 +4,3 @@ scikit-learn
 tensorflow==2.12.0
 mindrove
 keyboard
-pydantic
