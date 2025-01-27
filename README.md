@@ -1,11 +1,11 @@
 # NaviFlame
 MindRove's middle-sized AI system for detecting hand and finger motions from wearable sensor data.
 
-The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, feature extraction, SVM-based classification, and real-time visualization.
+The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, feature extraction, SVM/MLP-based classification, and real-time visualization.
 
 ## Features
 - Record gestures with EMG data from the MindRove device.
-- Fine-tune an SVM model for user.
+- Fine-tune an SVM/MLP model for user.
 - Real-time inference and display of gesture predictions.
 - A Unity-based application that visualizes data sent from `NaviFlame` via a socket.
 
@@ -50,12 +50,13 @@ All configuration settings are defined in the example.py file. Below are key var
     - data_path: Path to save recorded gesture data.
     - feature_extractor_path: Path to the pretrained feature extractor model.
     - svm_model_path: Path to save the trained SVM model.
+    - mlp_model_path: Path to save the trained MLP model.
     - scaler_path: Path to save the scaler used in feature scaling.
     - gesture_image_path: Directory containing gesture images.
 
 - Flags:
     - record: Enables/disables gesture recording.
-    - fine_tune: Enables/disables SVM fine-tuning.
+    - fine_tune: Enables/disables fine-tuning.
     - show_predicted_image: Enables displaying gesture images during inference.
     - send_to_socket: Sends predictions to a socket server.
 
@@ -69,10 +70,10 @@ All configuration settings are defined in the example.py file. Below are key var
 ```python example.py```
 ### 1. Record Gestures
 Run the example.py script with the record flag set to True to capture gestures.
-### 2. Fine-Tune SVM Model
-Set fine_tune to True in example.py. After recording gestures, the script will fine-tune the SVM model.
+### 2. Fine-Tune SVM/MLP Model
+Set fine_tune to True in example.py. After recording gestures, the script will fine-tune the SVM/MLP model.
 ### 3. Real-Time Inference
-Ensure recorded data exists and the SVM model is fine-tuned. Run the script to perform real-time inference.
+Ensure recorded data exists and the model is fine-tuned. Run the script to perform real-time inference.
 
 ## Input Parameters
 
@@ -96,6 +97,7 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 | `recorded_data`       | List of recorded data used for training.         | -                      |
 | `recorded_labels`     | List of labels for the recorded data.            | -                       |
 | `svm_path`            | Path to save the trained SVM model.              | -      |
+| `mlp_model_path`      | Path to save the trained MLP model.              | -      |
 | `scaler_path`         | Path to save the scaler used for normalization.  | -         |
 | `C`                   | SVM regularization parameter.                   | `5.0`                     |
 | `kernel`              | SVM kernel type.                                | `rbf`                     |
@@ -106,6 +108,7 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 |-----------------------|--------------------------------------------------|---------------------------|
 | `feature_extractor_path` | Path to the feature extractor model.           | -    |
 | `svm_model_path`      | Path to the SVM model.                           | -      |
+| `mlp_model_path`      | Path to the MLP model.                           | -      |
 | `scaler_path`         | Path to the scaler used for normalization.       | -         |
 | `filters`             | List of filters applied during inference.        | -  |
 | `model_input_len`     | Length of input data to the model.               | `100` samples             |
