@@ -70,6 +70,7 @@ def real_time_inference(
     Args:
         feature_extractor_path (str): Path to the feature extractor model.
         svm_model_path (str): Path to the SVM model.
+        mlp_model_path (str): Path to the MLP model.
         scaler_path (str): Path to the scaler.
         filters (list): List of filters.
         model_input_len (int): Length of input data to the model.
@@ -109,7 +110,7 @@ def real_time_inference(
                     data[i, ch] = filter_.process(data[i, ch], ch)
         return data
 
-    # Inference thread
+    # Inference thread svm
     def inference_worker_svm():
         inference_results = []
         while not stop_event.is_set():
@@ -130,6 +131,7 @@ def real_time_inference(
                 continue
 
 
+    # Inference thread mlp
     def inference_worker():
         inference_results = []
         while not stop_event.is_set():

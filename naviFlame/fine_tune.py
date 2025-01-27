@@ -35,6 +35,7 @@ def fine_tune_svm(
         recorded_data (list): List of recorded data.
         recorded_labels (list): List of recorded labels.
         svm_path (str): Path to save the SVM model.
+        mlp_model_path (str): Path to save the MLP model.
         scaler_path (str): Path to save the scaler.
         C (float): Regularization parameter.
         kernel (str): SVM kernel.
