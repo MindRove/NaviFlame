@@ -7,18 +7,18 @@ import cv2
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from naviFlame.record import record_gestures
-from naviFlame.fine_tune import fine_tune_svm
-from naviFlame.inference import real_time_inference
-from naviFlame.inference import show_image_for_prediction
-from naviFlame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
-from naviFlame.utils import BiquadMultiChan, FilterTypes
+from NaviFlame.record import record_gestures
+from NaviFlame.fine_tune import fine_tune_svm
+from NaviFlame.inference import real_time_inference
+from NaviFlame.inference import show_image_for_prediction
+from NaviFlame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
+from NaviFlame.utils import BiquadMultiChan, FilterTypes
 
 
 def main():
 
     # Paths for models and data
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'naviFlame'))
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'NaviFlame'))
     data_path = os.path.join(base_dir, "data", "recorded_gestures.pkl")
     feature_extractor_path = os.path.join(base_dir, "data", "og_fine_tune.h5")
     svm_model_path = os.path.join(base_dir, "data", "svm_model.pkl")

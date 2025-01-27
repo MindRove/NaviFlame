@@ -11,7 +11,7 @@ import sys
 from keras.models import load_model
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from naviFlame.utils import MyMagnWarping, MyScaling
+from NaviFlame.utils import MyMagnWarping, MyScaling
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -99,7 +99,7 @@ def fine_tune_svm(
     logging.info(f"Cross-validation accuracies: {val_accuracies}")
     if val_accuracy < 0.60:
         response = input(
-            "SVM validation accuracy is below 80%. Would you like to stop and check the device (Yes/No)? "
+            "SVM validation accuracy is below 60%. Would you like to stop and check the device (Yes/No)? "
         ).strip().lower()
         if response in ("yes", "y"):
             logging.info(
