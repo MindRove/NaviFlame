@@ -1,13 +1,13 @@
-# naviFlame
+# NaviFlame
 MindRove's middle-sized AI system for detecting hand and finger motions from wearable sensor data.
 
-The naviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, feature extraction, SVM-based classification, and real-time visualization.
+The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, feature extraction, SVM-based classification, and real-time visualization.
 
 ## Features
 - Record gestures with EMG data from the MindRove device.
 - Fine-tune an SVM model for user.
 - Real-time inference and display of gesture predictions.
-- A Unity-based application that visualizes data sent from `naviFlame` via a socket.
+- A Unity-based application that visualizes data sent from `NaviFlame` via a socket.
 
 
 ---
@@ -135,12 +135,12 @@ Ensure recorded data exists and the SVM model is fine-tuned. Run the script to p
 ## Unity Visualization
 
 ### Description
-The Unity application is designed to visualize the gestures detected by the `naviFlame` system. It connects to the same socket used for data transmission and provides a real-time display of the gestures as 3D animations.
+The Unity application is designed to visualize the gestures detected by the `NaviFlame` system. It connects to the same socket used for data transmission and provides a real-time display of the gestures as 3D animations.
 
 ### Running the Unity Application
-1. Decompress the zip file into a folder of your choice (e.g., naviFlame_unity_visualizer/). 
-2. Inside the decompressed folder, locate the naviFlame_visualizer.exe file and run it to start the Unity application.
-3. Ensure that the Unity application is run prior to the  naviFlame. The visualizer will automatically connect to the socket and display the gestures real-time.
+1. Decompress the zip file into a folder of your choice (e.g., NaviFlame_unity_visualizer/). 
+2. Inside the decompressed folder, locate the NaviFlame_visualizer.exe file and run it to start the Unity application.
+3. Ensure that the Unity application is run prior to the  NaviFlame. The visualizer will automatically connect to the socket and display the gestures real-time.
 
 ---
 ## Contact
