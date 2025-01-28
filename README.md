@@ -1,11 +1,11 @@
 # NaviFlame
-MindRove's middle-sized AI system for detecting hand and finger motions from wearable sensor data.
+[MindRove](https://mindrove.com/)'s middle-sized AI system for detecting hand and finger motions from wearable sensor data.
 
 The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, Deep Learning based feature extraction, SVM/MLP-based classification, and real-time visualization.
 
 ## Features
 - Record gestures with EMG data from the MindRove device.
-- Fine-tune a hybrid Deep Learning plus SVM/MLP model for the user (only the SVM part has to be fine-tuned making the process super quick)
+- Fine-tune a hybrid Deep Learning plus SVM/MLP model for the user (only the SVM/MLP part has to be fine-tuned making the process super quick)
 - Real-time AI inference and display of gesture predictions.
 - A Unity-based application that visualizes data sent from `NaviFlame` via a socket.
 
