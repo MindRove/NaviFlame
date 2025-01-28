@@ -55,7 +55,6 @@ def show_image_for_prediction(prediction, gesture_image_path, skip_gestures):
 
 def real_time_inference(
     feature_extractor_path,
-    svm_model_path,
     mlp_model_path,
     scaler_path,
     filters,
@@ -69,7 +68,6 @@ def real_time_inference(
     
     Args:
         feature_extractor_path (str): Path to the feature extractor model.
-        svm_model_path (str): Path to the SVM model.
         mlp_model_path (str): Path to the MLP model.
         scaler_path (str): Path to the scaler.
         filters (list): List of filters.
@@ -84,8 +82,7 @@ def real_time_inference(
     # Load the models and scaler
     feature_extractor = load_model(feature_extractor_path, custom_objects={"MyMagnWarping": MyMagnWarping, "MyScaling": MyScaling})
     feature_extractor = Model(inputs=feature_extractor.input, outputs=feature_extractor.get_layer("dense_8").output)
-    with open(svm_model_path, "rb") as svm_file:
-        svm = pickle.load(svm_file)
+
     with open(scaler_path, "rb") as scaler_file:
         scaler = pickle.load(scaler_file)
     with open(mlp_model_path, "rb") as mlp_file:
@@ -110,27 +107,6 @@ def real_time_inference(
                     data[i, ch] = filter_.process(data[i, ch], ch)
         return data
 
-    # Inference thread svm
-    def inference_worker_svm():
-        inference_results = []
-        while not stop_event.is_set():
-            try:
-                input_tensor = data_queue.get(timeout=1)
-                features = feature_extractor.predict(input_tensor)
-                features_scaled = scaler.transform(features)
-                predictions = svm.predict_proba(features_scaled)
-                inference_results.extend(predictions)
-
-                if len(inference_results) >= batch_size:
-                    avg_result = np.mean(inference_results, axis=0)
-                    final_output = np.argmax(avg_result)
-                    if avg_result[final_output] >= prediction_threshold:
-                        output_queue.put((final_output, avg_result))
-                    inference_results.clear()
-            except Empty:
-                continue
-
-
     # Inference thread mlp
     def inference_worker():
         inference_results = []
@@ -139,7 +115,7 @@ def real_time_inference(
                 input_tensor = data_queue.get(timeout=1)
                 features = feature_extractor.predict(input_tensor)
                 features_scaled = scaler.transform(features)
-                predictions = mlp_model.predict_proba(features_scaled)  # Use the MLP model here
+                predictions = mlp_model.predict_proba(features_scaled) 
                 inference_results.extend(predictions)
 
                 if len(inference_results) >= batch_size:

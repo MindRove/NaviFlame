@@ -1,6 +1,5 @@
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
 from keras.models import Model
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_val_score
@@ -14,35 +13,28 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from NaviFlame.utils import MyMagnWarping, MyScaling
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import time
 
 
-def fine_tune_svm(
+def fine_tune_model(
     feature_extractor_path,
     recorded_data, 
     recorded_labels, 
-    svm_path,
     mlp_model_path,
     scaler_path,
-    C=5.0, 
-    kernel='rbf', 
-    gamma='scale', 
 ):
     """
-    Fine-tunes the SVM model using the recorded data.
+    Fine-tunes the MLP model using the recorded data.
     
     Args:
         model (keras.models.Model): Feature extractor model.
         recorded_data (list): List of recorded data.
         recorded_labels (list): List of recorded labels.
-        svm_path (str): Path to save the SVM model.
         mlp_model_path (str): Path to save the MLP model.
         scaler_path (str): Path to save the scaler.
-        C (float): Regularization parameter.
-        kernel (str): SVM kernel.
-        gamma (str): Kernel coefficient.
         
         Returns:
-            tuple: (SVM model, Scaler, Validation accuracy)        
+            tuple: (MLP model, Scaler, Validation accuracy)        
     """
     model = load_model(feature_extractor_path, custom_objects={"MyMagnWarping": MyMagnWarping, "MyScaling": MyScaling})
 
@@ -60,16 +52,7 @@ def fine_tune_svm(
     X_val_scaled = scaler.transform(features_val)
     logging.info("Data preprocessed and scaled.")
 
-    # SVM model training
-    svm = SVC(kernel=kernel, C=C, gamma=gamma, probability=True)
-    svm.fit(X_train_scaled, y_train)
-    logging.info("SVM model trained.")
-
-    # Save the SVM model and scaler
-    with open(svm_path, "wb") as f:
-        pickle.dump(svm, f)
-        logging.info("SVM model saved.")
-
+    # Save the scaler
     with open(scaler_path, "wb") as f:
         pickle.dump(scaler, f)
         logging.info("Scaler saved.")
@@ -86,21 +69,16 @@ def fine_tune_svm(
     mlp.fit(X_train_scaled, y_train)
     mlp_accuracy = mlp.score(X_val_scaled, y_val)
     logging.info(f"MLP validation accuracy: {mlp_accuracy}")
-    logging.info(f"MLP validation accuracy: {cross_val_score(mlp, X_train_scaled, y_train, cv=5)}")
+    logging.info(f"MLP cross-validation accuracy: {cross_val_score(mlp, X_train_scaled, y_train, cv=5)}")
 
     # Save the MLP model
     with open(mlp_model_path, "wb") as f:
         pickle.dump(mlp, f)
         logging.info("MLP model saved.")
 
-    # Validation accuracy
-    val_accuracy = svm.score(X_val_scaled, y_val)
-    logging.info(f"SVM validation accuracy: {val_accuracy}")
-    val_accuracies = cross_val_score(svm, X_train_scaled, y_train, cv=5)
-    logging.info(f"Cross-validation accuracies: {val_accuracies}")
-    if val_accuracy < 0.60:
+    if mlp_accuracy < 0.60:
         response = input(
-            "SVM validation accuracy is below 60%. Would you like to stop and check the device (Yes/No)? "
+            "MLP validation accuracy is below 60%. Would you like to stop and check the device (Yes/No)? "
         ).strip().lower()
         if response in ("yes", "y"):
             logging.info(
@@ -111,4 +89,4 @@ def fine_tune_svm(
         else:
             logging.info("Continuing despite low validation accuracy.")
 
-    return svm, scaler, val_accuracy
+    return scaler, mlp_accuracy

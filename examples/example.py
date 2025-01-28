@@ -8,7 +8,7 @@ import cv2
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from NaviFlame.record import record_gestures
-from NaviFlame.fine_tune import fine_tune_svm
+from NaviFlame.fine_tune import fine_tune_model
 from NaviFlame.inference import real_time_inference
 from NaviFlame.inference import show_image_for_prediction
 from NaviFlame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
@@ -21,14 +21,12 @@ def main():
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'NaviFlame'))
     data_path = os.path.join(base_dir, "data", "recorded_gestures.pkl")
     feature_extractor_path = os.path.join(base_dir, "data", "og_fine_tune.h5")
-    svm_model_path = os.path.join(base_dir, "data", "svm_model.pkl")
     mlp_model_path = os.path.join(base_dir, "data", "mlp_model.pkl")
     scaler_path = os.path.join(base_dir, "data", "scaler.pkl")
     gesture_image_path = os.path.join(base_dir, "gestures")
 
-
     # Flags 
-    record = False
+    record = True
     fine_tune = True
     show_predicted_image = True
     send_to_socket = True
@@ -41,9 +39,9 @@ def main():
 
     # Define filters
     filters = [
-        BiquadMultiChan(8, FilterTypes.bq_type_highpass, 4.5 / sampling_rate, 0.5, 0.0),
-        BiquadMultiChan(8, FilterTypes.bq_type_notch, 50.0 / sampling_rate, 4.0, 0.0),
-        BiquadMultiChan(8, FilterTypes.bq_type_lowpass, 100.0 / sampling_rate, 0.5, 0.0),
+        BiquadMultiChan(8, FilterTypes.bq_type_highpass, 4.5 / sampling_rate, 0.5, 0.0), # Dc filter
+        BiquadMultiChan(8, FilterTypes.bq_type_notch, 50.0 / sampling_rate, 4.0, 0.0), # 50 Hz noise
+        BiquadMultiChan(8, FilterTypes.bq_type_lowpass, 100.0 / sampling_rate, 0.5, 0.0), 
     ]
 
     # Step 1: Record Gestures
@@ -63,20 +61,19 @@ def main():
     else:
         print("Skipping gesture recording.")
 
-    # Step 2: Fine-Tune the SVM Model
-    print("Step 2: Fine-Tuning the SVM Model")
+    # Step 2: Fine-Tune the Model
+    print("Step 2: Fine-Tuning the Model")
     
     if fine_tune:
         with open(data_path, "rb") as f:
             recorded_data, recorded_labels = pickle.load(f)
 
-        svm, scaler, val_accuracy = fine_tune_svm(
+        scaler, val_accuracy = fine_tune_model(
             feature_extractor_path=feature_extractor_path,
             recorded_data=recorded_data,
             recorded_labels=recorded_labels,
             scaler_path=scaler_path,
             mlp_model_path=mlp_model_path,
-            svm_path=svm_model_path
         )
         print(f"Fine-tuning complete. Validation accuracy: {val_accuracy:.2f}")
     else:
@@ -92,7 +89,6 @@ def main():
     try:
         for prediction, probabilities in real_time_inference(
             feature_extractor_path=feature_extractor_path,
-            svm_model_path=svm_model_path,
             mlp_model_path=mlp_model_path,
             scaler_path=scaler_path,
             filters=filters,
