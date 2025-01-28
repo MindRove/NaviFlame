@@ -1,12 +1,12 @@
 # NaviFlame
 MindRove's middle-sized AI system for detecting hand and finger motions from wearable sensor data.
 
-The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, feature extraction, SVM/MLP-based classification, and real-time visualization.
+The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, Deep Learning based feature extraction, SVM/MLP-based classification, and real-time visualization.
 
 ## Features
 - Record gestures with EMG data from the MindRove device.
-- Fine-tune an SVM/MLP model for user.
-- Real-time inference and display of gesture predictions.
+- Fine-tune a hybrid Deep Learning plus SVM/MLP model for the user (only the SVM part has to be fine-tuned making the process super quick)
+- Real-time AI inference and display of gesture predictions.
 - A Unity-based application that visualizes data sent from `NaviFlame` via a socket.
 
 
@@ -48,7 +48,7 @@ All configuration settings are defined in the example.py file. Below are key var
 ### Key Configuration Variables:
 - Paths:
     - data_path: Path to save recorded gesture data.
-    - feature_extractor_path: Path to the pretrained feature extractor model.
+    - feature_extractor_path: Path to the pretrained feature extractor AI model.
     - svm_model_path: Path to save the trained SVM model.
     - mlp_model_path: Path to save the trained MLP model.
     - scaler_path: Path to save the scaler used in feature scaling.
