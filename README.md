@@ -66,6 +66,16 @@ All configuration settings are defined in the example.py file. Below are key var
     
     
 ## Usage
+Please ensure that your MindRove device is correctly connected and positioned. In the right hand, the USB is distal (towards the back of the hand), 
+in pronation (palm down on the table) the box is on the top of the arm. Please refer to the images for reference:
+<div align="center">
+  <img src="./assets/ARB_position.jpg" alt="Alt text" width="200"/>
+</div>
+
+
+<br>
+
+Run the example code: 
 ```python example.py```
 ### 1. Record Gestures
 Run the example.py script with the record flag set to True to capture gestures.
