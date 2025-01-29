@@ -59,12 +59,13 @@ def fine_tune_model(
 
     # MLP model training
     mlp = MLPClassifier(
-        hidden_layer_sizes=(256, 128, 64, 32), 
-        max_iter=1000, 
+        hidden_layer_sizes=(32, 16), 
+        max_iter=2000, 
         random_state=42,
-        activation='relu',  
-        solver='adam',  
-        alpha=0.0001,
+        activation='tanh',  
+        solver='lbfgs',  
+        alpha=0.01,
+        learning_rate='constant',
     )
     mlp.fit(X_train_scaled, y_train)
     mlp_accuracy = mlp.score(X_val_scaled, y_val)
