@@ -6,9 +6,7 @@ from queue import Queue, Empty
 from mindrove.board_shim import BoardShim, MindRoveInputParams, BoardIds
 import os
 import cv2
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from NaviFlame.utils import MyMagnWarping, MyScaling
+from utils import MyMagnWarping, MyScaling
 
 last_displayed_gesture = None    
 
@@ -59,7 +57,7 @@ def real_time_inference(
     scaler_path,
     filters,
     model_input_len=100,
-    gyro_threshold=2000,
+    gyro_threshold=500,
     prediction_threshold=0.4,
     batch_size=5,
 ):
@@ -113,7 +111,7 @@ def real_time_inference(
         while not stop_event.is_set():
             try:
                 input_tensor = data_queue.get(timeout=1)
-                features = feature_extractor.predict(input_tensor)
+                features = feature_extractor.predict(input_tensor, verbose=0)
                 features_scaled = scaler.transform(features)
                 predictions = mlp_model.predict_proba(features_scaled) 
                 inference_results.extend(predictions)
@@ -147,8 +145,9 @@ def real_time_inference(
             emg_data = raw_data[:8]
             gyro_data = raw_data[gyro_channels]
 
-            if np.any(gyro_data > gyro_threshold):
+            if np.any(np.abs(gyro_data) > gyro_threshold):
                 batch_of_data = []
+                print("Too much movement detected. Resetting the buffer.")
                 continue
 
             processed_data = preprocess_data(emg_data.T)

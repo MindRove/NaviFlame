@@ -1,0 +1,11 @@
+{
+    "data_path": "NaviFlame/data/recorded_gestures.pkl",
+    "feature_extractor_path": "NaviFlame/models/og_fine_tune.h5",
+    "mlp_model_path": "NaviFlame/models/mlp_model.pkl",
+    "scaler_path": "NaviFlame/models/scaler.pkl",
+    "gesture_image_path": "NaviFlame/gestures",
+    "record": false,
+    "fine_tune": false,
+    "show_predicted_image": true,
+    "send_to_socket": true
+}

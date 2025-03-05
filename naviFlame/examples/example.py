@@ -4,32 +4,36 @@ import pickle
 from threading import Event, Thread
 from queue import Queue
 import cv2
+import json
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from NaviFlame.record import record_gestures
-from NaviFlame.fine_tune import fine_tune_model
-from NaviFlame.inference import real_time_inference
-from NaviFlame.inference import show_image_for_prediction
-from NaviFlame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
-from NaviFlame.utils import BiquadMultiChan, FilterTypes
+from record import record_gestures
+from fine_tune import fine_tune_model
+from inference import real_time_inference, show_image_for_prediction
+from utils import FilterTypes, BiquadMultiChan, BiquadMultiChan, FilterTypes, send_output_to_socket
 
+# Load config
+def load_config():
+    base_dir = os.path.join(os.path.dirname(__file__))
+    json_path = os.path.join(base_dir, "config.json")
+    with open(json_path, "r") as f:
+        return json.load(f)
 
 def main():
-
-    # Paths for models and data
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'NaviFlame'))
-    data_path = os.path.join(base_dir, "data", "recorded_gestures.pkl")
-    feature_extractor_path = os.path.join(base_dir, "data", "og_fine_tune.h5")
-    mlp_model_path = os.path.join(base_dir, "data", "mlp_model.pkl")
-    scaler_path = os.path.join(base_dir, "data", "scaler.pkl")
-    gesture_image_path = os.path.join(base_dir, "gestures")
+    config = load_config()
+    # Paths from config
+    data_path = config["data_path"]
+    feature_extractor_path = config["feature_extractor_path"]
+    mlp_model_path = config["mlp_model_path"]
+    scaler_path = config["scaler_path"]
+    gesture_image_path = config["gesture_image_path"]
 
     # Flags 
-    record = True
-    fine_tune = True
-    show_predicted_image = True
-    send_to_socket = True
+    record = config["record"]
+    fine_tune = config["fine_tune"]
+    show_predicted_image = config["show_predicted_image"]
+    send_to_socket = config["send_to_socket"]
     
     # Skip gestures
     skip_gestures = []
@@ -93,11 +97,12 @@ def main():
             scaler_path=scaler_path,
             filters=filters,
             model_input_len=model_input_len,
-            gyro_threshold=2000,
+            gyro_threshold=500,
             prediction_threshold=0.4,
             batch_size=5,
         ):
-            print(f"Prediction: {prediction}, Probabilities: {probabilities.round(4)}")
+            #print(f"Prediction: {prediction}, Probabilities: {probabilities.round(4)}")
+            print(f"Predicted gesture: {prediction}")
             if send_to_socket:
                 output_queue.put(prediction)
             if show_predicted_image:

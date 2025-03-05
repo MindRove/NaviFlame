@@ -79,7 +79,7 @@ def record_gestures(
         # Prepare and start streaming from the MindRove board
         board_shim.prepare_session()
         board_shim.start_stream(450000)
-        logging.info("Connected to MindRove board.")
+        logging.info("Starting streaming from MindRove board.")
         
         # Warm-up phase to ensure the board is ready
         start_time = time.time()

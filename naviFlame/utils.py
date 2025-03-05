@@ -2,6 +2,7 @@ import math
 from enum import Enum
 import tensorflow as tf 
 import socket
+import time
 from queue import Empty
 
 class MyMagnWarping(tf.keras.layers.Layer):
@@ -180,11 +181,18 @@ class BiquadMultiChan:
 
 
 def send_output_to_socket(stop_event, output_queue):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 8052))
-        while not stop_event.is_set():
-            try:
-                output_value = output_queue.get(timeout=1)
-                s.sendall(int(output_value).to_bytes(4, byteorder='little'))
-            except Empty:
-                continue
+    while True:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect(('localhost', 8052))
+                while not stop_event.is_set():
+                    try:
+                        output_value = output_queue.get(timeout=1)
+                        s.sendall(int(output_value).to_bytes(4, byteorder='little'))
+                    except Empty:
+                        continue
+
+        except ConnectionRefusedError:
+            print("Connection refused. Make sure the Visualizer is running. Retrying in 40 seconds...")
+            time.sleep(40)
+            

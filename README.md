@@ -2,15 +2,16 @@
 [MindRove](https://mindrove.com/)'s middle-sized AI system for detecting hand and finger motions from wearable sensor data.
 
 The NaviFlame implements a pipeline for recording, fine-tuning, and performing real-time inference of gesture-based inputs using a MindRove device. The system incorporates signal processing, Deep Learning based feature extraction, MLP-based classification, and real-time visualization.
+ <br>
+
 
 ## Features
 - Record gestures with EMG data from the MindRove device.
 - Fine-tune a hybrid Deep Learning plus MLP model for the user (only the MLP part has to be fine-tuned making the process super quick)
 - Real-time AI inference and display of gesture predictions.
 - A Unity-based application that visualizes data sent from `NaviFlame` via a socket.
-
-
----
+ 
+ <br>
 
 ## Table of Contents
 1. [Setup](#setup)
@@ -21,10 +22,9 @@ The NaviFlame implements a pipeline for recording, fine-tuning, and performing r
 6. [Unity Visualization](#unity-visualization)
 7. [Contact](#contact)
 
----
+ <br>
 
 ## Setup
-
 ### Requirements
 - Python >=3.7 and <3.11.
 - Libraries:
@@ -41,9 +41,10 @@ The NaviFlame implements a pipeline for recording, fine-tuning, and performing r
    pip install -r requirements.txt
 3. Ensure the MindRove device is properly placed and connected.
 
+ <br>
 
 ## Configuration
-All configuration settings are defined in the example.py file. Below are key variables to modify based on your requirements:
+All configuration settings are defined in the config.json file. Below are key variables to modify based on your requirements:
 
 ### Key Configuration Variables:
 - Paths:
@@ -58,12 +59,13 @@ All configuration settings are defined in the example.py file. Below are key var
     - fine_tune: Enables/disables fine-tuning.
     - show_predicted_image: Enables displaying gesture images during inference.
     - send_to_socket: Sends predictions to a socket server.
-
+### Other Configuration Variables:
 - Data Parameters:
     - sampling_rate: Sampling rate for EMG data (default: 500 Hz).
     - model_input_len: Input length for gesture model (default: 100 samples).
     - filters: List of filters applied to preprocess EMG signals.
-    
+
+ <br>
     
 ## Usage
 Please ensure that your MindRove device is correctly connected and positioned. In the right hand, the USB is distal (towards the back of the hand), 
@@ -82,7 +84,10 @@ Run the example.py script with the record flag set to True to capture gestures.
 ### 2. Fine-Tune MLP Model
 Set fine_tune to True in example.py. After recording gestures, the script will fine-tune the MLP model.
 ### 3. Real-Time Inference
-Ensure recorded data exists and the model is fine-tuned. Run the script to perform real-time inference.
+Ensure recorded data exists and the model is fine-tuned. Run the inference example to perform real-time inference by 
+```python inference_example.py```
+
+ <br>
 
 ## Input Parameters
 
@@ -117,28 +122,27 @@ Ensure recorded data exists and the model is fine-tuned. Run the script to perfo
 | `scaler_path`         | Path to the scaler used for normalization.       | -         |
 | `filters`             | List of filters applied during inference.        | -  |
 | `model_input_len`     | Length of input data to the model.               | `100` samples             |
-| `gyro_threshold`      | Threshold for gyro data filtering.               | `2000`                    |
+| `gyro_threshold`      | Threshold for gyro data filtering.               | `500`                    |
 | `prediction_threshold`| Confidence threshold for gesture predictions.    | `0.4`                     |
 | `batch_size`          | Number of samples processed for one prediction.  | `5`                       |
-
+ <br>
 
 
 ## System Pipeline
 1. Data Recording:
 
-- The record_gestures function records EMG data from the MindRove board.
-- Signals are preprocessed using filters for noise reduction.
+  - The record_gestures function records EMG data from the MindRove board.
+  - Signals are preprocessed using filters for noise reduction.
 2. Fine-Tuning:
 
-- The fine_tune_model function extracts features and trains an MLP classifier.
-- Data is scaled, and model performance is validated.
+  - The fine_tune_model function extracts features and trains an MLP classifier.
+  - Data is scaled, and model performance is validated.
 3. Real-Time Inference:
 
-- The real_time_inference function processes live EMG data and predicts gestures.
-- Predictions are visualized and optionally sent via a socket connection.
+  - The real_time_inference function processes live EMG data and predicts gestures.
+  - Predictions are visualized and optionally sent via a socket connection.
 
-
----
+ <br>
 
 ## Unity Visualization
 
@@ -149,8 +153,12 @@ The Unity application is designed to visualize the gestures detected by the `Nav
 1. Decompress the zip file into a folder of your choice (e.g., NaviFlame_unity_visualizer/). 
 2. Inside the decompressed folder, locate the NaviFlame_visualizer.exe file and run it to start the Unity application.
 3. Ensure that the Unity application is run prior to the  NaviFlame. The visualizer will automatically connect to the socket and display the gestures real-time.
+<div align="center">
+  <img src="./assets/visualizer.jpg" alt="Alt text" width="400"/>
+</div>
 
----
+ <br>
+
 ## Contact
 For support, collaboration, or queries, please reach out via:
 - **Email**: [info@mindrove.com](mailto:info@mindrove.com)
