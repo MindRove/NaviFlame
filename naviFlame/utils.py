@@ -185,6 +185,7 @@ def send_output_to_socket(stop_event, output_queue):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect(('localhost', 8052))
+                print("Connected to Visualizer successfully.")
                 while not stop_event.is_set():
                     try:
                         output_value = output_queue.get(timeout=1)

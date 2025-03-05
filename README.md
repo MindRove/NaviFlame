@@ -148,6 +148,7 @@ Ensure recorded data exists and the model is fine-tuned. Run the inference examp
 
 ### Description
 The Unity application is designed to visualize the gestures detected by the `NaviFlame` system. It connects to the same socket used for data transmission and provides a real-time display of the gestures as 3D animations.
+It visualizes the predicted gesture from your NaviFlame running in Python, so it is important to run the inference in Python to send data to the visualizer.
 
 ### Running the Unity Application
 1. Decompress the zip file into a folder of your choice (e.g., NaviFlame_unity_visualizer/). 
