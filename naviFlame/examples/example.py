@@ -15,7 +15,7 @@ from utils import FilterTypes, BiquadMultiChan, BiquadMultiChan, FilterTypes, se
 
 # Load config
 def load_config():
-    base_dir = os.path.join(os.path.dirname(__file__))
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     json_path = os.path.join(base_dir, "config.json")
     with open(json_path, "r") as f:
         return json.load(f)
