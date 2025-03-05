@@ -73,7 +73,7 @@ in pronation (palm down on the table) the box is on the top of the arm. Please r
 <div align="center">
   <img src="./assets/ARB_position.jpg" alt="Alt text" width="200"/>
 </div>
-
+For best performance, gestures should be smooth and consistent. Avoid movements that are too aggressive or too light, as either can lead to misinterpretation. Also, avoid sudden movements, as the system works best with controlled and deliberate gestures. A more seamless and responsive interaction experience can be achieved by performing each movement with a natural flow. Gesture 0 refers to the rest position, so make sure your hand is relaxed.
 
 <br>
 
