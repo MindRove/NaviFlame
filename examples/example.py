@@ -8,17 +8,32 @@ import json
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from record import record_gestures
-from fine_tune import fine_tune_model
-from inference import real_time_inference, show_image_for_prediction
-from utils import FilterTypes, BiquadMultiChan, BiquadMultiChan, FilterTypes, send_output_to_socket
+from naviflame.record import record_gestures
+from naviflame.fine_tune import fine_tune_model
+from naviflame.inference import real_time_inference, show_image_for_prediction
+from naviflame.utils import FilterTypes, BiquadMultiChan, BiquadMultiChan, FilterTypes, send_output_to_socket
 
-# Load config
+#config loading
 def load_config():
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    json_path = os.path.join(base_dir, "config.json")
-    with open(json_path, "r") as f:
-        return json.load(f)
+    possible_paths = [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json")),
+        os.path.abspath("config.json")
+    ]
+    config_path = next((p for p in possible_paths if os.path.exists(p)), None)
+
+    if config_path is None:
+        raise FileNotFoundError("Configuration file not found in the expected locations.")
+
+    with open(config_path, "r") as f:
+        config = json.load(f)
+
+    config_dir = os.path.dirname(config_path)
+    for key in ["data_path", "feature_extractor_path", "mlp_model_path", "scaler_path", "gesture_image_path"]:
+        if key in config:
+            config[key] = os.path.abspath(os.path.join(config_dir, config[key]))
+
+    return config
+
 
 def main():
     config = load_config()
@@ -28,6 +43,7 @@ def main():
     mlp_model_path = config["mlp_model_path"]
     scaler_path = config["scaler_path"]
     gesture_image_path = config["gesture_image_path"]
+    
 
     # Flags 
     record = config["record"]

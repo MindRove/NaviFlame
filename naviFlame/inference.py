@@ -6,7 +6,7 @@ from queue import Queue, Empty
 from mindrove.board_shim import BoardShim, MindRoveInputParams, BoardIds
 import os
 import cv2
-from utils import MyMagnWarping, MyScaling
+from naviflame.utils import MyMagnWarping, MyScaling
 
 last_displayed_gesture = None    
 

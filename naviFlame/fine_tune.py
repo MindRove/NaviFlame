@@ -9,7 +9,7 @@ import numpy as np
 import sys
 from keras.models import load_model
 
-from utils import MyMagnWarping, MyScaling
+from naviflame.utils import MyMagnWarping, MyScaling
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 import time

@@ -181,19 +181,29 @@ class BiquadMultiChan:
 
 
 def send_output_to_socket(stop_event, output_queue):
-    while True:
+    while not stop_event.is_set(): 
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(5)  
                 s.connect(('localhost', 8052))
                 print("Connected to Visualizer successfully.")
+
                 while not stop_event.is_set():
                     try:
                         output_value = output_queue.get(timeout=1)
                         s.sendall(int(output_value).to_bytes(4, byteorder='little'))
                     except Empty:
-                        continue
+                        continue  
+                    except BrokenPipeError:
+                        print("Connection lost. Reconnecting...")
+                        break  
 
         except ConnectionRefusedError:
-            print("Connection refused. Make sure the Visualizer is running. Retrying in 40 seconds...")
+            print("Connection refused. Ensure the Visualizer is running. Retrying in 40 seconds...")
             time.sleep(40)
+        except KeyboardInterrupt:
+            print("\nSocket communication interrupted. Closing connection...")
+            break 
+
+    print("Socket thread stopped.")
             

@@ -7,24 +7,36 @@ from queue import Queue
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from inference import real_time_inference, show_image_for_prediction
-from utils import FilterTypes, BiquadMultiChan, send_output_to_socket
+from naviflame.inference import real_time_inference, show_image_for_prediction
+from naviflame.utils import FilterTypes, BiquadMultiChan, send_output_to_socket
 
 import tensorflow as tf
 tf.get_logger().setLevel('ERROR')  # Suppresses logs except errors
 
 
+#config loading
 def load_config():
-    """Loads the configuration from config.json."""
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    config_path = os.path.join(base_dir, "config.json")
+    possible_paths = [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json")),
+        os.path.abspath("config.json")
+    ]
+    config_path = next((p for p in possible_paths if os.path.exists(p)), None)
+
+    if config_path is None:
+        raise FileNotFoundError("Configuration file not found in the expected locations.")
 
     with open(config_path, "r") as f:
-        return json.load(f)
+        config = json.load(f)
+
+    config_dir = os.path.dirname(config_path)
+    for key in ["data_path", "feature_extractor_path", "mlp_model_path", "scaler_path", "gesture_image_path"]:
+        if key in config:
+            config[key] = os.path.abspath(os.path.join(config_dir, config[key]))
+
+    return config
 
 
 def main():
-    """Runs real-time inference using parameters from config.json."""
     config = load_config()
 
     # Extract paths
