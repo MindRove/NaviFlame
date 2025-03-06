@@ -15,7 +15,7 @@ cd NaviFlame
  <br>
 
 ## **Step 2: Create a Virtual Environment with the correct Python version**
-Make sure you have Python 3.10 installed. (Other versions are also compatible : Python >=3.7 and <3.11).
+Make sure you have Python 3.10 installed. (Other versions are also compatible : Python >=3.7 and <3.11).<br>
 If not, download it here: [Python 3.10 Official Download](https://www.python.org/downloads/release/python-3100/).
 
 Once installed, create a virtual environment:
